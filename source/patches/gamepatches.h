@@ -13,6 +13,7 @@ void gamepatches(u8 videoSelected, u8 videoPatchDol, u8 aspectForce, u8 language
                  u8 vipatch, u8 deflicker, u8 sneekVideoPatch, u8 hooktype, u8 videoWidth, u64 returnTo, u8 privateServer, const char *serverAddr);
 void anti_002_fix(u8 *addr, u32 len);
 void deflicker_patch(u8 *addr, u32 len);
+void patch_dither(u8* addr, u32 len);
 void patch_vfilters(u8 *addr, u32 len, u8 *vfilter);
 void patch_vfilters_rogue(u8 *addr, u32 len, u8 *vfilter);
 void patch_width(u8 *addr, u32 len);
