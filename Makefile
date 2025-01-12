@@ -40,6 +40,7 @@ SOURCES		:=	source \
 				source/cheats \
 				source/homebrewboot \
 				source/themes \
+				source/magic_patcher \
 				source/menu \
 				source/memory \
 				source/FileOperations \
@@ -60,7 +61,7 @@ INCLUDES	:=	source
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-CFLAGS		=	-g -ggdb -O2 -Wall -Wno-multichar -Wno-unused-parameter -Wextra $(MACHDEP) $(INCLUDE) -D_GNU_SOURCE
+CFLAGS		=	-g -ggdb -O2 -fno-unroll-loops -Wall -Wno-multichar -Wno-unused-parameter -Wextra $(MACHDEP) $(INCLUDE) -D_GNU_SOURCE
 CXXFLAGS	=	$(CFLAGS)
 LDFLAGS		=	-g -ggdb $(MACHDEP) -Wl,-Map,$(notdir $@).map,--section-start,.init=0x80B00000,-wrap,malloc,-wrap,free,-wrap,memalign,-wrap,calloc,-wrap,realloc,-wrap,malloc_usable_size,-wrap,time
 
@@ -127,7 +128,7 @@ export OFILES	:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) \
 					$(TTFFILES:.ttf=.ttf.o) $(PNGFILES:.png=.png.o) $(addsuffix .o,$(DOLFILES)) \
 					$(OGGFILES:.ogg=.ogg.o) $(PCMFILES:.pcm=.pcm.o) $(MP3FILES:.mp3=.mp3.o) \
 					$(WAVFILES:.wav=.wav.o) $(addsuffix .o,$(ELFFILES)) $(addsuffix .o,$(BINFILES)) \
-					$(BNRFILES:.bnr=.bnr.o) $(CURDIR)/data/magic_patcher.o
+					$(BNRFILES:.bnr=.bnr.o)
 
 #---------------------------------------------------------------------------------
 # build a list of include paths
