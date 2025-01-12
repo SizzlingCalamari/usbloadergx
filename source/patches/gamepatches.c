@@ -246,25 +246,45 @@ void deflicker_patch(u8 *addr, u32 len)
     }
 }
 
-/** Patch GXSetDither to early return without changing dither. Pattern from NoobletCheese on gbatemp **/
+/**
+    Patch GXSetDither and GXPokeDither to early return without changing dither.
+    Search patterns by NoobletCheese and SizzlingCalamari.
+**/
 void patch_dither(u8* addr, u32 len)
 {
-    u32 SearchPattern[10] = {
-        0x3C80CC01, 0x38A00061, 0x38000000,
-        0x80C70220, 0x5066177A, 0x98A48000,
-        0x90C48000, 0x90C70220, 0xB0070002,
-        0x4E800020};
-    u8 *addr_start = addr;
-    u8 *addr_end = addr + len - sizeof(SearchPattern);
-    while (addr_start <= addr_end)
     {
-        if (memcmp(addr_start, SearchPattern, sizeof(SearchPattern)) == 0)
+        u32 SearchPattern[10] = {
+            0x3C80CC01, 0x38A00061, 0x38000000,
+            0x80C70220, 0x5066177A, 0x98A48000,
+            0x90C48000, 0x90C70220, 0xB0070002,
+            0x4E800020};
+        u8 *addr_start = addr;
+        u8 *addr_end = addr + len - sizeof(SearchPattern);
+        while (addr_start <= addr_end)
         {
-            *((u32 *)addr_start - 1) = 0x4e800020; // blr
-            gprintf("Patched GXSetDither @ %p\n", addr_start);
-            return;
+            if (memcmp(addr_start, SearchPattern, sizeof(SearchPattern)) == 0)
+            {
+                *((u32 *)addr_start - 1) = 0x4e800020; // blr
+                gprintf("Patched GXSetDither @ %p\n", addr_start);
+                return;
+            }
+            addr_start += 4;
         }
-        addr_start += 4;
+    }
+    {
+        u32 SearchPattern[4] = { 0xA0040002, 0x5060177A, 0xB0040002, 0x4E800020 };
+        u8 *addr_start = addr;
+        u8 *addr_end = addr + len - sizeof(SearchPattern);
+        while (addr_start <= addr_end)
+        {
+            if (memcmp(addr_start, SearchPattern, sizeof(SearchPattern)) == 0)
+            {
+                *((u32 *)addr_start - 1) = 0x4e800020; // blr
+                gprintf("Patched GXPokeDither @ %p\n", addr_start);
+                return;
+            }
+            addr_start += 4;
+        }
     }
 }
 
